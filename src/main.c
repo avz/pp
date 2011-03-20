@@ -31,6 +31,7 @@ off_t parse_size(const char *str, int base, char **suf);
 
 void draw_progress(int sig);
 off_t filesize(int fd);
+void usage();
 
 int main(int argc, char *argv[]) {
 	int res;
@@ -53,7 +54,7 @@ int main(int argc, char *argv[]) {
 	copy_options.read_only = 0;
 	copy_options.bar = &PROGRESS;
 
-	while((opt = getopt(argc, argv, "rls:")) != -1) {
+	while((opt = getopt(argc, argv, "rlhs:")) != -1) {
 		switch(opt) {
 			case 'r':
 				copy_options.read_only = 1;
@@ -80,8 +81,10 @@ int main(int argc, char *argv[]) {
 					exit(255);
 				}
 			break;
+			case 'h':
 			case '?':
 			default:
+				usage();
 				exit(255);
 		}
 	}
@@ -288,4 +291,23 @@ off_t parse_size(const char *str, int base, char **suf) {
 	return size;
 }
 
+
+void usage() {
+	fputs(
+		"Usage: pp [-lsr] [file-to-read]\n"
+		"\t-l: line mode, show progress based on approximately\n"
+		"\t    size of file in lines\n"
+		"\t-r: do not write data to STDOUT, act like `pp > /dev/null`\n"
+		"\t-s: manually set size of pipe,\n"
+		"\t    needed if STDIN is not a file (10Mb, 1Gb, 1Tb etc)\n"
+		"\n"
+		"EXAMPLES:\n"
+		"\tpp bigfile | gzip > bigfile.gz   progress of compression\n"
+		"\tpp -r /dev/ad0                   determine HDD line read speed\n"
+		"\tsomecmd | pp | gzip > file.gz    progress of pipe compression\n"
+		"\tpp file > /path/to/copy          copy file with bar\n"
+		,
+		stderr
+	);
+}
 /* */
