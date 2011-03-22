@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <sys/ttycom.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
@@ -158,36 +157,45 @@ int main(int argc, char *argv[]) {
 
 off_t filesize(int fd) {
 	struct stat stat;
-	off_t size;
+	off_t size = 0;
 
 	if(fstat(fd, &stat) < 0) {
 		perror("stat");
 		exit(errno);
 	}
 
-	if(stat.st_mode & S_IFBLK) {
-		off_t old_pos = lseek(fd, 0, SEEK_CUR);
+	do {
+		if(stat.st_mode & S_IFBLK) {
+			off_t old_pos = lseek(fd, 0, SEEK_CUR);
 
-		if(old_pos < 0) {
-			perror("lseek");
-			exit(errno);
-		}
+			if(old_pos < 0) {
+#ifdef DEBUG
+				perror("lseek -> 0");
+				exit(errno);
+#endif
+				break;
+			}
 
-		size = lseek(fd, 0, SEEK_END);
-		if(size < 0) {
-			perror("lseek");
-			exit(errno);
-		}
+			size = lseek(fd, 0, SEEK_END);
+			if(size < 0) {
+#ifdef DEBUG
+				perror("lseek -> SEEK_END");
+				exit(errno);
+#endif
+				break;
+			}
 
-		if(lseek(fd, old_pos, SEEK_SET) < 0) {
-			perror("lseek");
-			exit(errno);
+			if(lseek(fd, old_pos, SEEK_SET) < 0) {
+#ifdef DEBUG
+				perror("lseek -> old pos");
+				exit(errno);
+#endif
+				break;
+			}
+		} else if(S_ISREG(stat.st_mode)) {
+			size = stat.st_size;
 		}
-	} else if(S_ISREG(stat.st_mode)) {
-		size = stat.st_size;
-	} else {
-		size = 0;
-	}
+	} while(0);
 
 	return size;
 }
