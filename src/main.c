@@ -203,13 +203,13 @@ off_t filesize(int fd) {
 int copy(int src, int dst, struct copy_options *opt) {
 	char buf[1024*64];
 	struct progress *p = opt->bar;
-	int readed;
-	int written, w;
+	ssize_t readed, written, w;
 
 	while(1) {
 		readed = read(src, buf, sizeof(buf));
 		if(readed == 0)
 			break;
+
 		if(readed < 0) {
 			if(errno == EAGAIN) { /* signals */
 				usleep(10000);
