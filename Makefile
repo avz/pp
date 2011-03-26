@@ -1,7 +1,5 @@
-CC=cc
+CC?=cc
 LD=$(CC)
-CFLAGS:= -c -Wall -D_FILE_OFFSET_BITS=64
-LIBS=
 
 PROJECT=pp
 
@@ -11,10 +9,10 @@ VPATH=src
 all: $(PROJECT)
 
 $(PROJECT): $(OBJS)
-	$(LD) $(LDFLAGS) $(OBJS) $(LIBS) -o "$(PROJECT)"
+	$(LD) -lc $(LDFLAGS) $(OBJS) -o "$(PROJECT)"
 
 .c.o:
-	$(CC) $(CFLAGS) src/$*.c
+	$(CC) -c -Wall -D_FILE_OFFSET_BITS=64 $(CFLAGS) src/$*.c
 
 clean:
 	rm -f *.o "$(PROJECT)"
