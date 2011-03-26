@@ -219,40 +219,45 @@ int copy(int src, int dst, struct copy_options *opt) {
 		}
 		written = 0;
 
-		while(written < readed) {
-			if(opt->read_only)
-				w = readed - written;
-			else
-				w = write(dst, buf + written, readed - written);
+		if(opt->read_only) {
+			written = readed;
+		} else {
+			while(written < readed) {
+				if(opt->read_only)
+					w = readed - written;
+				else
+					w = write(dst, buf + written, readed - written);
 
-			if(w == 0) /* wtf? */
-				return -1;
+				if(w == 0) /* wtf? */
+					return -1;
 
-			if(w < 0) {
-				if(errno == EAGAIN) {
-					usleep(10000);
-					continue;
+				if(w < 0) {
+					if(errno == EAGAIN) {
+						usleep(10000);
+						continue;
+					}
+					return -1;
 				}
-				return -1;
+
+				written += w;
 			}
-
-			if(p->lines_mode) {
-				off_t new_lines_count = 0;
-				char *cur = buf + written;
-				char *end = buf + written + w;
-
-				while(cur != end) {
-					if(*cur == '\n')
-						new_lines_count++;
-					cur++;
-				}
-				progress_move_lines(p, new_lines_count);
-			}
-
-			progress_move(p, (off_t)w);
-
-			written += w;
 		}
+
+		if(p->lines_mode) {
+			off_t new_lines_count = 0;
+			char *cur = buf;
+
+			while(cur != buf + written) {
+				if(*cur == '\n')
+					new_lines_count++;
+				cur++;
+			}
+			progress_move_lines(p, new_lines_count);
+		}
+
+		progress_move(p, (off_t)written);
+
+
 	}
 
 	return 0;
