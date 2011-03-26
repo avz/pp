@@ -6,6 +6,8 @@ PROJECT=pp
 OBJS=main.o progress.o
 VPATH=src
 
+CFLAGS?=-O2
+
 all: $(PROJECT)
 
 $(PROJECT): $(OBJS)

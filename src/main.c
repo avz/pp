@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 	int src;
 	char opt;
 	int i;
-	char *size_suf;
+	char *size_suf = NULL;
 
 	int size_in_lines = -1;
 	off_t size_base1000 = 0;
