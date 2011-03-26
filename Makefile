@@ -20,4 +20,4 @@ clean:
 	rm -f *.o "$(PROJECT)"
 
 install:
-	install "$(PROJECT)" "$(PREFIX)/bin/$(PROJECT)"
+	install "$(PROJECT)" "$(PREFIX)/bin"
