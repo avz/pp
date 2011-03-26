@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
 
 			progress_init(&PROGRESS, STDERR_FILENO);
 			PROGRESS.lines_mode = copy_options.lines_mode;
-			PROGRESS.size = user_defined_size ? user_defined_size : (off_t)filesize(src);
+			PROGRESS.size = user_defined_size ? user_defined_size : filesize(src);
 			PROGRESS.size_lines = user_defined_size_lines;
 
 			DRAW_PROGRESS = 1;
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
 		PROGRESS.lines_mode = copy_options.lines_mode;
 
 		/* if used `pp < file` form */
-		PROGRESS.size = user_defined_size ? user_defined_size : (off_t)filesize(STDIN_FILENO);
+		PROGRESS.size = user_defined_size ? user_defined_size : filesize(STDIN_FILENO);
 		PROGRESS.size_lines = user_defined_size_lines;
 
 		DRAW_PROGRESS = 1;
@@ -256,7 +256,6 @@ int copy(int src, int dst, struct copy_options *opt) {
 		}
 
 		progress_move(p, (off_t)written);
-
 
 	}
 
