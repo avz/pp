@@ -1,6 +1,6 @@
 CC=cc
 LD=$(CC)
-CFLAGS= -c -O2 -Wall -D_FILE_OFFSET_BITS
+CFLAGS:= -c -Wall -D_FILE_OFFSET_BITS=64
 LIBS=
 
 PROJECT=pp
