@@ -322,17 +322,15 @@ off_t parse_size(const char *str, int base, char **suf) {
 void usage() {
 	fputs(
 		"Usage: pp [-lsr] [file-to-read]\n"
-		"\t-l: line mode, show progress based on approximately\n"
-		"\t    size of file in lines\n"
-		"\t-r: do not write data to STDOUT\n"
-		"\t-s: manually set size of pipe,\n"
-		"\t    need when STDIN is not a file (10Mb, 1Gb, 1Tb etc)\n"
+		"  -l: line mode, show progress based on approximate size of file in lines\n"
+		"  -r: do not write data to STDOUT\n"
+		"  -s: manually set size of pipe (10Mb, 1Gb, 1Tb etc)\n"
 		"\n"
 		"EXAMPLES:\n"
-		"\tpp bigfile | gzip > bigfile.gz   progress of compression\n"
-		"\tpp -r /dev/ad0                   determine HDD line read speed\n"
-		"\tsomecmd | pp | gzip > file.gz    progress of pipe compression\n"
-		"\tpp file > /path/to/copy          copy file with bar\n"
+		"  pp bigfile | gzip > bigfile.gz   progress of compression\n"
+		"  pp -r /dev/ad0                   determine HDD line read speed\n"
+		"  somecmd | pp | gzip > file.gz    progress of pipe compression\n"
+		"  pp file > /path/to/copy          copy file with bar\n"
 		,
 		stderr
 	);
