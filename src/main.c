@@ -109,9 +109,11 @@ int main(int argc, char *argv[]) {
 			if(argc - optind > 1)
 				fprintf(stderr, "File %s:\n", argv[i]);
 
-			if((src = open(argv[i], O_RDONLY)) < 1) {
-				perror(argv[i]);
-				exit(errno);
+			while((src = open(argv[i], O_RDONLY)) < 1) {
+				if(errno != EINTR) {
+					perror(argv[i]);
+					exit(errno);
+				}
 			}
 
 			progress_init(&PROGRESS, STDERR_FILENO);
@@ -204,14 +206,22 @@ int copy(int src, int dst, struct copy_options *opt) {
 	char buf[1024*64];
 	struct progress *p = opt->bar;
 	ssize_t readed, written, w;
+	int eofMaybe = 0;
 
 	while(1) {
 		readed = read(src, buf, sizeof(buf));
-		if(readed == 0)
-			break;
+		if(readed == 0) {
+			if(eofMaybe)
+				break;
+
+			eofMaybe = 1;
+			continue;
+		}
+
+		eofMaybe = 0;
 
 		if(readed < 0) {
-			if(errno == EAGAIN) { /* signals */
+			if(errno == EINTR || errno == EAGAIN) { /* signals */
 				usleep(10000);
 				continue;
 			}
