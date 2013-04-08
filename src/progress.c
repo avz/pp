@@ -151,7 +151,7 @@ void progress_draw(struct progress *p) {
 
 	eta = 0;
 
-	if(size) {
+	if(size && position) {
 		if(position > size)
 			complete_state = 100500.0;
 		else

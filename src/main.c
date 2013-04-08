@@ -122,6 +122,8 @@ int main(int argc, char *argv[]) {
 			PROGRESS.size_lines = user_defined_size_lines;
 
 			DRAW_PROGRESS = 1;
+			progress_draw(&PROGRESS);
+
 			res = copy(src, STDOUT_FILENO, &copy_options);
 			if(res >= 0)
 				PROGRESS.force_done = 1;
@@ -145,9 +147,12 @@ int main(int argc, char *argv[]) {
 		PROGRESS.size_lines = user_defined_size_lines;
 
 		DRAW_PROGRESS = 1;
+		progress_draw(&PROGRESS);
+
 		res = copy(STDIN_FILENO, STDOUT_FILENO, &copy_options);
 		if(res >= 0)
 			PROGRESS.force_done = 1;
+
 		progress_draw(&PROGRESS);
 		DRAW_PROGRESS = 0;
 
