@@ -22,8 +22,8 @@ static int get_terminal_width(int fd) {
 	struct winsize wsz;
 
 	if(ioctl(fd, TIOCGWINSZ, &wsz) < 0) {
-		perror("ioctl(TIOCGWINSZ)");
-		width = -1;
+		/* ignore this error */
+		/* perror("ioctl(TIOCGWINSZ)"); */
 	} else {
 		width = wsz.ws_col;
 	}
