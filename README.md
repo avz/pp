@@ -33,3 +33,11 @@ pp [-lsr] [file-to-read]
  * `-l` line mode, show progress based on approximate size of file in lines
  * `-r` read-only mode: do not write data to STDOUT
  * `-s` manually set size of pipe (`10Mb`, `1Gb`, `1Tb` etc)
+
+## Installation
+```
+% git clone git://github.com/avz/pp.git
+% cd pp
+% make
+% sudo make install
+```
