@@ -173,7 +173,7 @@ void progress_draw(struct progress *p) {
 			sizeof(size_buf),
 			position,
 			p->lines_mode ? 1000 : 1024,
-			p->lines_mode ? "ln" : "b"
+			p->lines_mode ? "ln" : "B"
 		)
 	);
 
@@ -188,7 +188,7 @@ void progress_draw(struct progress *p) {
 				sizeof(size_buf),
 				size,
 				p->lines_mode ? 1000 : 1024,
-				p->lines_mode ? "ln" : "b"
+				p->lines_mode ? "ln" : "B"
 			)
 		);
 	}
@@ -204,7 +204,7 @@ void progress_draw(struct progress *p) {
 			sizeof(size_buf),
 			avg_speed,
 			p->lines_mode ? 1000 : 1024,
-			p->lines_mode ? "ln/s" : "b/s"
+			p->lines_mode ? "ln/s" : "B/s"
 		),
 		size && !p->force_done ? "eta" : "ela",
 		human_time(
