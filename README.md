@@ -1,4 +1,4 @@
-# pp
+# pp [![Build Status](https://secure.travis-ci.org/avz/pp.png)](http://travis-ci.org/avz/pp)
 ## Examples
 ### Compression progress bar
 
