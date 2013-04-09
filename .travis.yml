@@ -1,0 +1,15 @@
+language: c
+
+compiler:
+  - clang
+  - gcc
+
+notifications:
+  email: false
+
+before_script:
+  - "make"
+  - "sudo make install"
+
+script:
+  - "make test"
