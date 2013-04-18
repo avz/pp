@@ -36,8 +36,8 @@ pp [-lsr] [file-to-read]
 
 ## Installation
 ```
-% git clone git://github.com/avz/pp.git
-% cd pp
-% make
-% sudo make install
+git clone git://github.com/avz/pp.git
+cd pp
+make
+sudo make install
 ```
