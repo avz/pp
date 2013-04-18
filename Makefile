@@ -8,7 +8,7 @@ VPATH=src
 
 CFLAGS?=-O2
 
-all: $(PROJECT)
+build: $(PROJECT)
 
 $(PROJECT): $(OBJS)
 	$(LD) -lc $(LDFLAGS) $(OBJS) -o "$(PROJECT)"
@@ -19,8 +19,8 @@ $(PROJECT): $(OBJS)
 clean:
 	rm -f *.o "$(PROJECT)"
 
-install:
+install: build
 	install "$(PROJECT)" "$(PREFIX)/bin"
 
-test:
+test: build
 	sh tests/all.sh
