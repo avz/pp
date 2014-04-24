@@ -1,4 +1,4 @@
-#ifndef PROGREES_H
+#ifndef PROGRESS_H
 #define PROGRESS_H
 #include <stdint.h>
 #include <stdio.h>
