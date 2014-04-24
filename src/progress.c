@@ -15,7 +15,7 @@ static double gettimed() {
 	return (double)tv.tv_sec + (double)tv.tv_usec / 1000000;
 }
 
-static int get_terminal_width(int fd) {
+static size_t get_terminal_width(int fd) {
 	size_t width = 80;
 
 #ifdef TIOCGWINSZ
@@ -35,7 +35,7 @@ static int get_terminal_width(int fd) {
 static char *human_size(char *buf, size_t buf_len, off_t size, int base, const char *posfix) {
 	char *suf = "KMGTPEZY";
 	char c[3] = "\0\0\0";
-	double size_d = size;
+	double size_d = (double)size;
 	char *t;
 
 	while(size_d >= base && *suf) {
@@ -67,10 +67,10 @@ static char *human_size(char *buf, size_t buf_len, off_t size, int base, const c
 }
 
 static char *human_time(char *buf, size_t buf_len, time_t interval) {
-	int days = interval / (24*60*60);
-	int hours = (interval % (24*60*60)) / (60*60);
-	int minutes = (interval % (60*60)) / 60;
-	int seconds = interval % 60;
+	int days = (int)(interval / (24*60*60));
+	int hours = (int)((interval % (24*60*60)) / (60*60));
+	int minutes = (int)((interval % (60*60)) / 60);
+	int seconds = (int)(interval % 60);
 
 	if(days)
 		snprintf(buf, buf_len, "%02dd %02dh", days, hours);
@@ -122,9 +122,9 @@ void progress_draw(struct progress *p) {
 
 	double complete_state;
 	char *bar;
-	int terminal_width;
+	size_t terminal_width;
 
-	unsigned int bar_full_len, bar_len;
+	size_t bar_full_len, bar_len;
 	off_t size;
 	double ela, eta;
 
@@ -142,7 +142,7 @@ void progress_draw(struct progress *p) {
 		position = p->current_position;
 	}
 
-	avg_speed = (off_t)(ela ? position / ela : 0);
+	avg_speed = (off_t)(ela ? (double)position / ela : 0);
 
 	if(!size && p->lines_mode) {
 		if(p->current_position_lines && (p->current_position / p->current_position_lines))
@@ -155,9 +155,9 @@ void progress_draw(struct progress *p) {
 		if(position > size)
 			complete_state = 100500.0;
 		else
-			complete_state = (double)position / size;
+			complete_state = (double)position / (double)size;
 
-		eta = (double)size / avg_speed - ela;
+		eta = (double)size / (double)avg_speed - ela;
 		if(eta < 0)
 			eta = 0;
 	} else {
@@ -238,7 +238,7 @@ void progress_draw(struct progress *p) {
 	if((p->force_done && p->lines_mode && !p->size_lines) || complete_state > 1.0) {
 		bar_len = bar_full_len;
 	} else {
-		bar_len = (unsigned int)(complete_state * bar_full_len);
+		bar_len = (size_t)(complete_state * (double)bar_full_len);
 	}
 
 	if(bar_len > bar_full_len)
