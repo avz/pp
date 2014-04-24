@@ -35,7 +35,7 @@ void usage();
 int main(int argc, char *argv[]) {
 	int res;
 	int src;
-	char opt;
+	int opt;
 	int i;
 	char *size_suf = NULL;
 
@@ -241,7 +241,7 @@ int copy(int src, int dst, struct copy_options *opt) {
 				if(opt->read_only)
 					w = readed - written;
 				else
-					w = write(dst, buf + written, readed - written);
+					w = write(dst, buf + written, (size_t)(readed - written));
 
 				if(w == 0) /* wtf? */
 					return -1;
